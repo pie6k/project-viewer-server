@@ -1,6 +1,10 @@
 package com.grapeup.projectservice.model;
 
+import org.springframework.data.annotation.Id;
+
 public class Project {
+
+    @Id
     private String id;
     private String name;
     private String clientName;

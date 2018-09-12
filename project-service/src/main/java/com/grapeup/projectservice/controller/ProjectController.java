@@ -5,7 +5,6 @@ import com.grapeup.projectservice.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,20 +16,19 @@ public class ProjectController {
     private ProjectRepository projectRepository;
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public List<Project> getAllProjects(@PathVariable String id) {
-        return projectRepository.getAllProjects();
+    public List<Project> getAllProjects() {
+        return projectRepository.findAll();
     }
 
     @RequestMapping(path = "/project/{id}", method = RequestMethod.GET)
     public Project getProject(@PathVariable String id) {
-        return projectRepository.getProject(id);
+        return projectRepository.findById(id).orElse(null);
     }
 
     @RequestMapping(path = "/project", method = RequestMethod.POST)
-    public ResponseEntity<Void> createProject(@RequestBody Project projectData) {
-        // TODO
-        System.out.println(projectData.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+    public String createProject(@RequestBody Project projectData) {
+        Project createdProject = projectRepository.insert(projectData);
+        return createdProject.getId();
     }
 
     @RequestMapping(path = "/project", method = RequestMethod.PUT)
