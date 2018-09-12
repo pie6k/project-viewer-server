@@ -1,7 +1,9 @@
 package com.grapeup.projectservice.controller;
 
-import com.grapeup.projectservice.model.Project;
-import com.grapeup.projectservice.repository.ProjectRepository;
+import com.grapeup.projectservice.entity.Project;
+import com.grapeup.projectservice.model.ProjectDetails;
+import com.grapeup.projectservice.model.ProjectHeader;
+import com.grapeup.projectservice.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,36 +14,39 @@ import java.util.List;
 @RestController
 public class ProjectController {
 
+    private ProjectService projectService;
+
     @Autowired
-    private ProjectRepository projectRepository;
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+    public List<ProjectHeader> getAllProjects() {
+        return projectService.findAll();
     }
 
     @RequestMapping(path = "/project/{id}", method = RequestMethod.GET)
-    public Project getProject(@PathVariable String id) {
-        return projectRepository.findById(id).orElse(null);
+    public ProjectDetails getProject(@PathVariable String id) {
+        return projectService.findById(id);
     }
 
     @RequestMapping(path = "/project", method = RequestMethod.POST)
-    public String createProject(@RequestBody Project projectData) {
-        Project createdProject = projectRepository.insert(projectData);
-        return createdProject.getId();
+    public String createProject(@RequestBody ProjectHeader projectData) {
+        return projectService.save(projectData);
     }
 
     @RequestMapping(path = "/project", method = RequestMethod.PUT)
-    public ResponseEntity<Void> updateProject(@RequestBody Project projectData) {
+    public ResponseEntity<Void> updateProject(@RequestBody ProjectHeader projectData) {
         // TODO
-        System.out.println(projectData.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    // TODO: assign employees endpoint
 
     @RequestMapping(path = "/project/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteProject(@PathVariable String id) {
         // TODO
-        System.out.println(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

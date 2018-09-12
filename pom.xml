@@ -13,5 +13,6 @@
         <module>gateway</module>
         <module>service-discovery</module>
         <module>project-service</module>
+        <module>employees-service</module>
     </modules>
 </project>
