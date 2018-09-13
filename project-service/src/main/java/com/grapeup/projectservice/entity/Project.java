@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Document(collection = "projects")
@@ -16,7 +17,7 @@ public class Project {
     private String location;
     private Date startDate;
     private Date endDate;
-    private List<String> assignedEmployees;
+    private List<String> assignedEmployees = new LinkedList<>();
 
     public String getId() {
         return id;
@@ -70,7 +71,19 @@ public class Project {
         return assignedEmployees;
     }
 
-    public void setAssignedEmployees(List<String> assignedEmployees) {
-        this.assignedEmployees = assignedEmployees;
+    public void addAssignedEmployees(List<String> assignedEmployees) {
+        this.assignedEmployees.addAll(assignedEmployees);
+    }
+
+    public void addAssignedEmployee(String employeeId) {
+        if (this.assignedEmployees.contains(employeeId)) {
+            return;
+        }
+
+        this.assignedEmployees.add(employeeId);
+    }
+
+    public void removeAssignedEmployee(String employeeId) {
+        this.assignedEmployees.remove(employeeId);
     }
 }

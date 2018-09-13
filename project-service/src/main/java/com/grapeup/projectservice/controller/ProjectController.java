@@ -1,6 +1,5 @@
 package com.grapeup.projectservice.controller;
 
-import com.grapeup.projectservice.entity.Project;
 import com.grapeup.projectservice.model.ProjectDetails;
 import com.grapeup.projectservice.model.ProjectHeader;
 import com.grapeup.projectservice.service.ProjectService;
@@ -42,11 +41,19 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // TODO: assign employees endpoint
-
     @RequestMapping(path = "/project/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteProject(@PathVariable String id) {
         // TODO
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/project/{id}/employees/{employeeId}", method = RequestMethod.POST)
+    public void addEmployeeToProject(@PathVariable String id, @PathVariable String employeeId) {
+        projectService.addEmployee(id, employeeId);
+    }
+
+    @RequestMapping(path = "/project/{id}/employees/{employeeId}", method = RequestMethod.DELETE)
+    public void removeEmployeeFromProject(@PathVariable String id, @PathVariable String employeeId) {
+        projectService.removeEmployee(id, employeeId);
     }
 }

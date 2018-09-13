@@ -1,6 +1,11 @@
 spring:
   application:
     name: project-service
+  data:
+    mongodb:
+      host: localhost
+      database: projects
+      port: 27017
 
 eureka:
   client:

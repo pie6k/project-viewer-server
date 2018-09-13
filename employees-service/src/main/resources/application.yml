@@ -1,6 +1,11 @@
 spring:
   application:
-    name: employees-service
+    name: employee-service
+  data:
+    mongodb:
+      host: localhost
+      database: employees
+      port: 27017
 
 eureka:
   client:

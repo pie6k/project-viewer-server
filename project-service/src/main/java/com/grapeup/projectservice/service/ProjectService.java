@@ -11,4 +11,8 @@ public interface ProjectService {
     ProjectDetails findById(String id);
 
     String save(ProjectHeader projectData);
+
+    void addEmployee(String id, String employeeId);
+
+    void removeEmployee(String id, String employeeId);
 }

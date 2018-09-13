@@ -44,6 +44,10 @@ zuul:
       # url: http://localhost:4000
       serviceId: project-service
       sensitiveHeaders:
-
+    employee-service:
+      path: /employees/**
+      # url: http://localhost:4000
+      serviceId: employee-service
+      sensitiveHeaders:
 server:
   port: 8080

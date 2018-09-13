@@ -9,7 +9,6 @@ import com.grapeup.projectservice.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,10 +17,12 @@ import java.util.stream.Collectors;
 public class ProjectServiceImpl implements ProjectService {
 
     private ProjectRepository projectRepository;
+    private EmployeesService employeesService;
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, EmployeesService employeesService) {
         this.projectRepository = projectRepository;
+        this.employeesService = employeesService;
     }
 
     @Override
@@ -33,21 +34,35 @@ public class ProjectServiceImpl implements ProjectService {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public ProjectDetails findById(String id) {
         // Asserts.
-        Optional<Project> projectOpt = projectRepository.findById(id);
-        projectOpt.orElseThrow(() -> {
-
-            return new ProjectNotFoundException("Project with " + id + "is not found.");
-        });
-        // TODO: convert assigned employee details
-        return new ProjectDetails(projectOpt.get());
+        Project project = getProjectModel(id);
+        List<EmployeeDetails> employeeDetails = employeesService.getEmployees(project.getAssignedEmployees());
+        return new ProjectDetails(project, employeeDetails);
     }
 
-    private List<EmployeeDetails> getEmployeeDetails(String projectId) {
-        return Collections.emptyList();
+    private Project getProjectModel(String id) {
+        Optional<Project> projectOpt = projectRepository.findById(id);
+        projectOpt.orElseThrow(() -> {
+            return new ProjectNotFoundException("Project with " + id + "is not found.");
+        });
+
+        return projectOpt.get();
+    }
+
+    @Override
+    public void addEmployee(String id, String employeeId) {
+        Project project = getProjectModel(id);
+        project.addAssignedEmployee(employeeId);
+        projectRepository.save(project);
+    }
+
+    @Override
+    public void removeEmployee(String id, String employeeId) {
+        Project project = getProjectModel(id);
+        project.removeAssignedEmployee(employeeId);
+        projectRepository.save(project);
     }
 
     @Override
